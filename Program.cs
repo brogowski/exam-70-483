@@ -12,7 +12,7 @@ namespace Sandbox
         static void Main(string[] args)
         {
             var input = File.ReadAllLines(@"marvel-wikia-data.csv");
-            Task.Run(() =>
+            Task.Factory.StartNew(() =>
             {
                 input
                 .Skip(1)
@@ -21,7 +21,7 @@ namespace Sandbox
                     Console.WriteLine(ParseCsvLine(x).Name);
                 }, TaskCreationOptions.AttachedToParent))
                 .ToArray();
-            }).Wait();
+            }, TaskCreationOptions.None).Wait();
 
             Console.ReadKey();
         }
