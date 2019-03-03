@@ -12,17 +12,16 @@ namespace Sandbox
         static void Main(string[] args)
         {
             var input = File.ReadAllLines(@"marvel-wikia-data.csv");
-            Task.Factory.StartNew(() =>
-            {
-                input
-                .Skip(1)
-                .Select((x) => Task.Factory.StartNew(() => 
-                {
-                    Console.WriteLine(ParseCsvLine(x).Name);
-                }, TaskCreationOptions.AttachedToParent))
-                .ToArray();
-            }, TaskCreationOptions.None).Wait();
 
+            var tasks = input.Skip(1)
+            .Select((x) => 
+            {
+                var task = Task.Run(() => ParseCsvLine(x));
+                task.ContinueWith(t => Console.WriteLine(t.Result.Name));
+                return task;
+             }).ToArray();
+
+            Task.WaitAll(tasks);
             Console.ReadKey();
         }
 
