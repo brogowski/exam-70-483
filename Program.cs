@@ -13,15 +13,13 @@ namespace Sandbox
         {
             var input = File.ReadAllLines(@"marvel-wikia-data.csv");
             var parsed = input.Skip(1).Select(ParseCsvLine);
-            var task = new Task(() =>
+            var task = Task.Run(() =>
             {
                 foreach (var item in parsed)
                 {
                     Console.WriteLine(item);
                 }
             });
-
-            task.Start();
             
             Console.ReadKey();
         }
