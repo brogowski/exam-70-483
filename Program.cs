@@ -14,8 +14,16 @@ namespace Sandbox
             var input = File.ReadAllLines(@"marvel-wikia-data.csv");
             var parsed = input.Skip(1).Select(ParseCsvLine).Take(25);
 
-            Parallel.ForEach(parsed, (x) => Console.WriteLine(x.Name));
+            var result = Parallel.ForEach(parsed, (x, state) => 
+            {
+                Console.WriteLine(x.Name);
+                if (x.Name.Contains("Spider"))
+                {
+                    state.Stop();
+                }
+            });
 
+            Console.WriteLine("Has completed: " + result.IsCompleted);
             Console.ReadKey();
         }
 
