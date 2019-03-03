@@ -16,10 +16,10 @@ namespace Sandbox
             {
                 input
                 .Skip(1)
-                .Select((x) => Task.Run(() => 
+                .Select((x) => Task.Factory.StartNew(() => 
                 {
                     Console.WriteLine(ParseCsvLine(x).Name);
-                }))
+                }, TaskCreationOptions.AttachedToParent))
                 .ToArray();
             }).Wait();
 
